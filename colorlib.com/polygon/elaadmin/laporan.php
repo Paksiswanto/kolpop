@@ -1,3 +1,298 @@
+<<<<<<< HEAD
+<?php
+require 'config.php';
+if(!empty($_SESSION["id"])){
+  $id = $_SESSION["id"];
+  $result = mysqli_query($conn, "SELECT * FROM tbuser WHERE id = $id");
+  $row = mysqli_fetch_assoc($result);
+}
+else{
+  header("Location: login.php");
+}
+?>
+<?php
+$host   = "localhost";
+$user   = "root";
+$pass   = "";
+$db     = "sekolah";
+
+$koneksi     = mysqli_connect($host, $user, $pass, $db);
+if (!$koneksi) { //cek koneksi
+    die("Tidak bisa terkoneksi ke database");
+}
+$Kode_guru     = "";
+$Nama_guru     = "";
+$Jenis_kelamin = "";
+$Alamat        = "";
+$sukses        = "";
+$error         = "";
+
+if (isset($_GET['op'])) {  //tahapan untuk url
+    $op = $_GET['op'];
+} else {
+    $op = "";
+}
+if ($op == 'delete'){ //mengoprasikan data  didelete
+    $id             = $_GET['id'];
+    $sql1           = "delete from tbguru where id = '$id'";
+    $q1             = mysqli_query($koneksi,$sql1);
+    if($q1){
+        $sukses = "Berhasil hapus data";
+    }else{
+        $error  = "Gagal melakukan delete data";
+    }
+}
+
+if ($op == 'edit') { //mengoprasikan data untuk diedit
+    $id           = $_GET['id'];
+    $sql1            = "select * from tbguru where id = '$id'";
+    $q1              = mysqli_query($koneksi, $sql1);
+    $r1              = mysqli_fetch_array($q1);
+    $Kode_guru       = $r1['Kode_guru']; 
+    $Nama_guru       = $r1['Nama_guru'];
+    $Jenis_kelamin   = $r1['Jenis_kelamin'];
+    $Alamat          = $r1['Alamat'];
+
+    if ($Kode_guru == '') {
+        $error = "Data tidak ditemukan";
+    }
+}
+
+if (isset($_POST['simpan'])) { // untuk create
+    $Kode_guru     = $_POST['Kode_guru'];
+    $Nama_guru     = $_POST['Nama_guru'];
+    $Jenis_kelamin = $_POST['Jenis_kelamin'];
+    $Alamat        = $_POST['Alamat'];
+
+    if ($Kode_guru && $Nama_guru && $Jenis_kelamin && $Alamat) {
+        if ($op == 'edit') { //untuk update
+            $sql1        = "Update tbguru set Kode_guru = '$Kode_guru',Nama_guru= '$Nama_guru',Jenis_kelamin = '$Jenis_kelamin',Alamat= '$Alamat' where id = '$id' ";
+            $q1          = mysqli_query($koneksi, $sql1);
+            if ($q1) {
+                $sukses = "Data berhasil diupdate";
+            } else {
+                $error  = "Data gagal diupdate";
+            }
+        } else {  //untuk insert
+            $sql1 = "insert into tbguru(Kode_guru,Nama_guru,Jenis_kelamin,Alamat) values ('$Kode_guru','$Nama_guru','$Jenis_kelamin','$Alamat')";
+            $q1 =  mysqli_query($koneksi,$sql1);
+            if ($q1) {
+                $sukses     = "Berhasil memasukan data baru";
+            }else{
+                $error      ="Gagal Memasukan data";
+            }
+        }
+    } else {
+        $error = "Silahkan masukan data";
+    }
+}
+
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="Width=device-width, initial-scale=1.0">
+    <title>Data sekolah</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        .mx-auto {          
+            width: 800px
+        }
+                            
+        .card {
+            margin-top: 10px;
+        }
+        * {box-sizing: border-box;}
+
+body { 
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.header {
+  overflow: hidden;
+  background-color: #f1f1f1;
+  padding: 20px 10px;
+}
+
+.header a {
+  float: left;
+  color: black;
+  text-align: center;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 18px; 
+  line-height: 25px;
+  border-radius: 4px;
+}
+
+.header a.logo {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.header a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.header a.active {
+  background-color: dodgerblue;
+  color: white;
+}
+
+.header-right {
+  float: right;
+}
+
+@media screen and (max-width: 500px) {
+  .header a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+  
+  .header-right {
+    float: none;
+  }
+}
+
+    </style>
+</head>
+
+<body>
+<div class="header">
+  <a href="#default" class="logo">CRUD</a>
+  <div class="header-right">
+<a href="logout.php" style="color:red">Logout</a>
+<a href="index.php" style="color: #48f542">Data Guru</a> 
+<a href="siswa.php" style="color: #48f542">Data Siswa</a>
+<a href="jurusan.php" style="color: #48f542">Data Jurusan</a>
+<a href="mapel.php" style="color: #48f542">Data Mapel</a>
+<a href="eskul.php" style="color: #48f542"> Data Ekstrakurikuler</a>
+  </div>
+</div>
+    
+    <div class="mx-auto">
+        <!-- Untuk memasukan data -->
+        <div class="card">
+            <div class="card-header">
+                Create / Edit Data
+            </div>
+            <div class="card-body">
+                <?php
+                if ($error) {
+                ?>
+                    <div class="alert alert-danger" role="alert">
+                        <?php echo $error ?>
+                    </div>
+                <?php
+                 
+                }
+                ?>
+                <?php
+                if ($sukses) {
+                ?>
+                    <div class="alert alert-success" role="alert">
+                        <?php echo $sukses ?>
+                    </div>
+                <?php
+                   header("refresh:2;url=index.php"); // 2 detik
+                }
+                ?>
+                <form action="" method="POST">
+                    <div class="mb-3">
+                        <label for="Kode_guru " class="form-label">Kode Guru</label>
+                        <input type="text" class="form-control" id="Kode_guru" name="Kode_guru" value="<?php echo $Kode_guru ?> ">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Nama_guru " class="form-label">Nama Guru</label>
+                        <input type="text" class="form-control" id="Nama_guru" name="Nama_guru" value="<?php echo $Nama_guru ?> ">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Jenis_kelamin " class="form-label">Jenis kelamin</label>
+                        <select class="form-control" name="Jenis_kelamin" id="Jenis_kelamin">
+                            <option value="">- Jenis Kelamin -</option>
+                            <option value="LAKI-LAKI" <?php if ($Jenis_kelamin == "LAKI-LAKI") echo "selected" ?>>LAKI-LAKI</option>
+                            <option value="PEREMPUAN" <?php if ($Jenis_kelamin == "PEREMPUAN") echo "selected" ?>>PEREMPUAN</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Kode_guru " class="form-label">Alamat</label>
+                        <input type="text" class="form-control" id="Alamat" name="Alamat" value="<?php echo $Alamat ?> ">
+                    </div>
+                    <div class="col-12">
+                        <input type="submit" name="simpan" value="Simpan Data" class="btn btn-primary" />
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        <!-- tempat dimana mengeluarkan data -->
+        <div class="card">
+            <div class="card-header text-white bg-secondary">
+                Data Guru
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <Tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Kode Guru</th>
+                            <th scope="col">Nama Guru</th>
+                            <th scope="col">Jenis Kelamin</th>
+                            <th scope="col">Alamat</th>
+                            <th scope="col">Aksi</th>
+                        </Tr>
+                    <tbody>
+                        <?php //mengeluarkan isi dari data-data dari variabel tadi
+                        $sql2   = "select * from tbguru order by id desc";
+                        $q2     = mysqli_query($koneksi, $sql2);
+                        $urut   = 1;
+                        while ($r2 = mysqli_fetch_array($q2)) {
+                            $id             = $r2['id'];
+                            $Kode_guru      = $r2['Kode_guru'];
+                            $Nama_guru      = $r2['Nama_guru'];
+                            $Jenis_kelamin  = $r2['Jenis_kelamin'];
+                            $Alamat         = $r2['Alamat'];
+
+                        ?>
+                            <tr>
+                                <th scope="row"> <?php echo $urut++ ?></th>
+                                <Td scope="row"><?php echo $Kode_guru ?></Td>
+                                <Td scope="row"><?php echo $Nama_guru ?></Td>
+                                <Td scope="row"><?php echo $Jenis_kelamin ?></Td>
+                                <Td scope="row"><?php echo $Alamat ?></Td>
+                                <td scope="row">
+                                    <a href="index.php?op=edit&id=<?php echo $id ?>"><button type="button" class="btn btn-warning">Edit</button></a>
+                                    <a href="index.php?op=delete&id=<?php echo $id ?>" onclick="return confirm('Yakin mau delete data?')"><button type="button" class="btn btn-danger float-end">Delete</button></a>
+                                    
+                                </td>
+                            </tr>
+                        <?php
+
+                        }
+
+                        ?>
+                    </tbody>
+                    </thead>
+                </table>
+                <form action="" method="POST">
+
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+=======
 <!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
@@ -153,9 +448,9 @@
                             <li><i class="fa fa-book"></i><a href="">Data Posts</a></li>
                             <li><i class="fa fa-comments"></i><a href="">Data Ulasan</a></li>
                             <li><i class="fa fa-trophy"></i><a href="">Data Penghargaan</a></li>
-                            <li><i class="fa fa-star"></i><a href="">Data Trend</a></li>
-                            <li><i class="fa fa-tags"></i><a href="sub_kategori.php">Data Sub_category</a></li>
-                            <li><i class="fa fa-exclamation-triangle"></i><a href="laporan.php">Data Laporan</a></li>
+                            <li><i class="fa fa-star"></i><a href="trend.html">Data Trend</a></li>
+                            <li><i class="fa fa-tags"></i><a href="sub_kategori.html">Data Sub_category</a></li>
+                            <li><i class="fa fa-exclamation-triangle"></i><a href="laporan.html">Data Laporan</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -222,195 +517,56 @@
                     </div>
                 </div>
             </div>
-           
-
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="box-title">Traffic </h4>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-8">
-                                <div class="card-body">
-
-                                    <div id="traffic-chart" class="traffic-chart"></div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="card-body">
-                                    <div class="progress-box progress-1">
-                                        <h4 class="por-title">Visits</h4>
-                                        <div class="por-txt">96,930 Users (40%)</div>
-                                        <div class="progress mb-2" style="height: 5px;">
-                                            <div class="progress-bar bg-flat-color-1" role="progressbar" style="width: 40%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="progress-box progress-2">
-                                        <h4 class="por-title">Bounce Rate</h4>
-                                        <div class="por-txt">3,220 Users (24%)</div>
-                                        <div class="progress mb-2" style="height: 5px;">
-                                            <div class="progress-bar bg-flat-color-2" role="progressbar" style="width: 24%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="progress-box progress-2">
-                                        <h4 class="por-title">Unique Visitors</h4>
-                                        <div class="por-txt">29,658 Users (60%)</div>
-                                        <div class="progress mb-2" style="height: 5px;">
-                                            <div class="progress-bar bg-flat-color-3" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="progress-box progress-2">
-                                        <h4 class="por-title">Targeted Visitors</h4>
-                                        <div class="por-txt">99,658 Users (90%)</div>
-                                        <div class="progress mb-2" style="height: 5px;">
-                                            <div class="progress-bar bg-flat-color-4" role="progressbar" style="width: 90%;" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                       
-                    </div>
-                </div>
-            </div>
 
             <div class="clearfix">
-            <div class="orders">
-                <div class="row">
-                    <div class="col-xl-8">
-                        <div class="card">
-                            <div class="card-body">
+
                                 <h4 class="box-title">Orders </h4>
                             </div>
                             <div class="card-body--">
                                 <div class="table-stats order-table ov-h">
-                                    <table class="table p-5">
+                                    <table class="table table-bordered shadow p-3 mb-5 bg-white rounded table-hover">
                                         <thead>
-                                            <tr>
-                                                <th class="serial">#</th>
-                                                <th class="avatar">Avatar</th>
+                                            <tr align="center">
                                                 <th>ID</th>
                                                 <th>Name</th>
-                                                <th>Product</th>
-                                                <th>Quantity</th>
-                                                <th>Status</th>
+                                                <th>post</th>
+                                                <th>laporan</th>
+                                                <th align="center">aksi</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
+                                        <tbody class="table-bordered">
+                                            <tr align="center">
                                                 <td class="serial">1.</td>
-                                                <td class="avatar">
-                                                    <div class="round-img">
-                                                        <a href="#"><img class="rounded-circle" src="https://colorlib.com/polygon/elaadmin/images/avatar/1.jpg" alt=""></a>
-                                                    </div>
-                                                </td>
-                                                <td> #5469 </td>
-                                                <td> <span class="name">Louis Stanley</span> </td>
-                                                <td> <span class="product">iMax</span> </td>
-                                                <td><span class="count">231</span></td>
-                                                <td>
-                                                    <span class="badge badge-complete">Complete</span>
-                                                </td>
+                                                <td> Adi Mahmudi </td>
+                                                <td> <span class="name">Resep Molen isi Bihun</span> </td>
+                                                <td><span class="name">Menurut saya ini agak aneh sejak kapan ada molen isi bihun</span></td>
+                                                <td><button class="btn btn-danger" type="submit"> HAPUS </button></td>
                                             </tr>
-                                            <tr>
+                                            <tr align="center">
                                                 <td class="serial">2.</td>
-                                                <td class="avatar">
-                                                    <div class="round-img">
-                                                        <a href="#"><img class="rounded-circle" src="https://colorlib.com/polygon/elaadmin/images/avatar/2.jpg" alt=""></a>
-                                                    </div>
-                                                </td>
-                                                <td> #5468 </td>
-                                                <td> <span class="name">Gregory Dixon</span> </td>
-                                                <td> <span class="product">iPad</span> </td>
-                                                <td><span class="count">250</span></td>
-                                                <td>
-                                                    <span class="badge badge-complete">Complete</span>
-                                                </td>
+                                                <td> Haji Muhidin </td>
+                                                <td> <span class="name">Bubur Naik Haji</span> </td>
+                                                <td> <span class="name">Sejak kapan ada bubur naik haji naik apa dia?</span> </td>
+                                                <td><button class="btn btn-danger" type="submit"> HAPUS </button></td>
                                             </tr>
-                                            <tr>
+                                            <tr align="center">
                                                 <td class="serial">3.</td>
-                                                <td class="avatar">
-                                                    <div class="round-img">
-                                                        <a href="#"><img class="rounded-circle" src="https://colorlib.com/polygon/elaadmin/images/avatar/3.jpg" alt=""></a>
-                                                    </div>
-                                                </td>
-                                                <td> #5467 </td>
-                                                <td> <span class="name">Catherine Dixon</span> </td>
-                                                <td> <span class="product">SSD</span> </td>
-                                                <td><span class="count">250</span></td>
-                                                <td>
-                                                    <span class="badge badge-complete">Complete</span>
-                                                </td>
+                                                <td> Garit Manusia ikan </td>
+                                                <td> <span class="name"></span> Ikan masak asam </td>
+                                                <td> <span class="product">Ikan masak asam ini sangat enak apalagi saya sebagai pecinta masakan ikan</span> </td>
+                                                <td><button class="btn btn-danger" type="submit"> HAPUS </button></td>
                                             </tr>
-                                            <tr>
+                                            <tr align="center">
                                                 <td class="serial">4.</td>
-                                                <td class="avatar">
-                                                    <div class="round-img">
-                                                        <a href="#"><img class="rounded-circle" src="https://colorlib.com/polygon/elaadmin/images/avatar/4.jpg" alt=""></a>
-                                                    </div>
-                                                </td>
-                                                <td> #5466 </td>
-                                                <td> <span class="name">Mary Silva</span> </td>
-                                                <td> <span class="product">Magic Mouse</span> </td>
-                                                <td><span class="count">250</span></td>
-                                                <td>
-                                                    <span class="badge badge-pending">Pending</span>
-                                                </td>
-                                            </tr>
-                                            <tr class=" pb-0">
-                                                <td class="serial">5.</td>
-                                                <td class="avatar pb-0">
-                                                    <div class="round-img">
-                                                        <a href="#"><img class="rounded-circle" src="https://colorlib.com/polygon/elaadmin/images/avatar/6.jpg" alt=""></a>
-                                                    </div>
-                                                </td>
-                                                <td> #5465 </td>
-                                                <td> <span class="name">Johnny Stephens</span> </td>
-                                                <td> <span class="product">Monitor</span> </td>
-                                                <td><span class="count">250</span></td>
-                                                <td>
-                                                    <span class="badge badge-complete">Complete</span>
-                                                </td>
+                                                <td> Habib Al Gatot </td>
+                                                <td> <span class="name">Resto Makan semua</span> </td>
+                                                <td> <span class="product">Disini Sangatlah enak apalagi ada pilihan all you can eat nya</span> </td>
+                                                <td><button class="btn btn-danger" type="submit"> HAPUS </button></td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4">
-                        <div class="row">
-                            <div class="col-lg-6 col-xl-12">
-                                <div class="card br-0">
-                                    <div class="card-body">
-                                        <div class="chart-container ov-h">
-                                            <div id="flotPie1" class="float-chart"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-xl-12">
-                                <div class="card bg-flat-color-3  ">
-                                    <div class="card-body">
-                                        <h4 class="card-title m-0  white-color ">August 2018</h4>
-                                    </div>
-                                    <div class="card-body">
-                                        <div id="flotLine5" class="flot-line"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-          
-
-              
                 
-        <div class="clearfix">
+        <div class="clearfix"></div>
         <footer class="site-footer">
             <div class="footer-inner bg-white">
                 <div class="row">
@@ -735,4 +891,5 @@
 
 <!-- Mirrored from colorlib.com/polygon/elaadmin/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 08 Feb 2023 04:49:23 GMT -->
 
+>>>>>>> 69210baf0725d74f27ef06fbf51259d640bae072
 </html>
