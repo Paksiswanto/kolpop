@@ -1129,6 +1129,11 @@ li {
     -ms-grid-row-align: center;
     align-items: center;
 }
+.content{
+    font-size: 12pt;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;
+    font-style: normal;
+}
 
 .pagination-area .pagination .page-link {
     color: #51545f;
