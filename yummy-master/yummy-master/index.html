@@ -49,6 +49,20 @@ form.example::after {
   clear: both;
   display: table;
 }
+.dropdown-toggle,
+    .dropdown-menu {
+        border-radius:0px !important;
+    }
+    .dropdown-item:hover {
+        color: white;
+        background-color: #fc6c3f;
+    }
+    .btn-danger {
+        width: 50%;
+    }
+    .dropdown:hover>.dropdown-menu {
+      display: block;
+    }
     </style>
 
     <!-- Responsive CSS -->
@@ -160,7 +174,7 @@ form.example::after {
         </div>
     </header>
     <!-- ****** Header Area End ****** -->
-    <form class="example mt-100 mb-3    " action="/action_page.php" style="margin:auto;max-width:300px">
+    <form class="example mt-5 mb-3" action="/action_page.php" style="margin:auto;max-width:300px">
         <input type="text" placeholder="Search.." name="search2">
         <button type="submit"><i class="fa fa-search"></i></button>
       </form>
