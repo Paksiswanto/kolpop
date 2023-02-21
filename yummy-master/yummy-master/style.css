@@ -395,7 +395,20 @@ li {
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
     font-size: 12px;
 }
-
+.dropdown-toggle,
+    .dropdown-menu {
+        border-radius:0px !important;
+    }
+    .dropdown-item:hover {
+        color: white;
+        background-color: #fc6c3f;
+    }
+    .btn-danger {
+        width: 50%;
+    }
+    .dropdown:hover>.dropdown-menu {
+      display: block;
+    }
 .search-hidden-form.search-form-open {
     z-index: 18;
     opacity: 1;
