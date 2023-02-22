@@ -10,46 +10,44 @@
 
     <!-- Title -->
     <title>KulinerKu - Food Blog</title>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
     <!-- Favicon -->
     <link rel="icon" href="img/core-img/mkmk-removebg-preview.png">
 
     <!-- Core Stylesheet -->
     <link href="style.css" rel="stylesheet">
     <style>
-        form.example input[type=text] {
-  padding: 2px;
-  font-size: 17px;
-  border: 1px solid rgb(240, 159, 20);
-  float: left;
-  width: 50%;
-  background:white;
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
 }
 
-/* Style the submit button */
-form.example button {
-  float: left;
-  width: 20%;
-  padding: 2px;
-  background: #f3a321;
+.search-box {
+  display: flex;
+  align-items: center;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  overflow: hidden;
+}
+
+.search-box input[type="text"] {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.search-box button {
+  background-color: #4CAF50;
   color: white;
-  font-size: 17px;
-  border: 1px solid grey;
-  border-left: none; /* Prevent double borders */
+  border: none;
+  border-radius: 0 25px 25px 0;
   cursor: pointer;
-  background-color: #da9c0b;
-}
-
-form.example button:hover {
-  background: #da9c0b;
-  
-}
-
-/* Clear floats */
-form.example::after {
-  content: "";
-  clear: both;
-  display: table;
+  padding: 10px 20px;
+  font-size: 16px;
 }
 
     </style>
@@ -155,10 +153,16 @@ form.example::after {
         </div>
     </header>
     <!-- ****** Header Area End ****** -->
-    <form class="example mt-5 mb-3" action="/action_page.php" style="margin:auto;max-width:300px">
-        <input type="text" placeholder="Search.." name="search2">
-        <button class="btn-warning" type="submit"><i class="fa fa-search"></i></button>
-      </form>
+    <div class="search-container">
+        <form>
+          <div class="search-box">
+            <input type="text" placeholder="Search...">
+            <button type="submit"><span class="fas fa-search"></span>
+            </button>
+          </div>
+        </form>
+      </div>
+      <br>
     <!-- ****** Welcome Post Area Start ****** -->
     <section class="welcome-post-sliders owl-carousel">
 
